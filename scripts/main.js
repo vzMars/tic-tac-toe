@@ -7,17 +7,27 @@ const playerX = Player('X');
 const playerO = Player('O');
 
 const displayController = (() => {
-  const _squares = Array.from(document.querySelectorAll('.square'));
+  const squares = Array.from(document.querySelectorAll('.square'));
   const gameInfo = document.querySelector('.game-info');
+  const restartBtn = document.querySelector('#restartBtn');
 
   document.getElementById('gameboard').addEventListener('click', (event) => {
-    let index = _squares.findIndex((_square) => {
-      return _square === event.target;
+    let index = squares.findIndex((square) => {
+      return square === event.target;
     });
     if (!gameLogic.getGameOver()) {
       gameBoard.checkIndex(index);
       render();
     }
+  });
+
+  restartBtn.addEventListener('click', (event) => {
+    gameBoard.clearBoard();
+    gameLogic.setWinner(false);
+    gameLogic.setGameOver(false);
+    gameLogic.setCurrentTurn(playerX.getMark());
+    changeGameInfo(`Player ${gameLogic.getCurrentTurn()}'s turn!`);
+    render();
   });
 
   const changeGameInfo = (text) => {
@@ -27,7 +37,7 @@ const displayController = (() => {
 
   const render = () => {
     gameBoard.getBoard().forEach((mark, index) => {
-      _squares[index].textContent = mark;
+      squares[index].textContent = mark;
     });
   };
 
@@ -53,9 +63,13 @@ const gameBoard = (() => {
       displayController.changeGameInfo(
         `Player ${gameLogic.getCurrentTurn()} has won!`
       );
-      gameLogic.setGameOver();
+      gameLogic.setGameOver(true);
     } else {
-      gameLogic.setCurrentTurn();
+      if (gameLogic.getCurrentTurn() === playerX.getMark()) {
+        gameLogic.setCurrentTurn(playerO.getMark());
+      } else {
+        gameLogic.setCurrentTurn(playerX.getMark());
+      }
       displayController.changeGameInfo(
         `Player ${gameLogic.getCurrentTurn()}'s turn!`
       );
@@ -89,34 +103,32 @@ const gameLogic = (() => {
 
   const getCurrentTurn = () => currentTurn;
 
-  const setCurrentTurn = () => {
-    if (getCurrentTurn() === 'X') {
-      currentTurn = playerO.getMark();
-    } else {
-      currentTurn = playerX.getMark();
-    }
+  const setCurrentTurn = (mark) => {
+    currentTurn = mark;
   };
 
   const getGameOver = () => gameOver;
 
-  const setGameOver = () => {
-    if (getGameOver()) {
-      gameOver = false;
-    } else {
-      gameOver = true;
-    }
+  const setGameOver = (status) => {
+    gameOver = status;
+  };
+
+  const getWinner = () => winner;
+
+  const setWinner = (status) => {
+    winner = false;
   };
 
   const checkWinner = (mark) => {
-    console.log(`checking if player${mark} is the winner`);
+    // console.log(`checking if player${mark} is the winner`);
     return (winner = winningCombos.some((combo) => {
-      console.log(`checking if ${combo} combo has ${mark} mark`);
+      //   console.log(`checking if ${combo} combo has ${mark} mark`);
       return combo.every((index) => {
-        console.log(
-          `index: ${index}  hasMark: ${gameBoard
-            .getBoard()
-            [index].includes(mark)}`
-        );
+        // console.log(
+        //   `index: ${index}  hasMark: ${gameBoard
+        //     .getBoard()
+        //     [index].includes(mark)}`
+        // );
         return gameBoard.getBoard()[index].includes(mark);
       });
     }));
@@ -126,7 +138,7 @@ const gameLogic = (() => {
     let drawStatus = !gameBoard.getBoard().includes('');
     if (drawStatus) {
       displayController.changeGameInfo(`It's a draw!`);
-      setGameOver();
+      setGameOver(true);
     }
   };
 
@@ -135,6 +147,8 @@ const gameLogic = (() => {
     setCurrentTurn,
     getGameOver,
     setGameOver,
+    getWinner,
+    setWinner,
     checkWinner,
     checkDraw,
   };

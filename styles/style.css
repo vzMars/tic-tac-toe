@@ -55,6 +55,22 @@ h2 {
   background-color: #216bac;
 }
 
+#restartBtn {
+  margin-top: 50px;
+  padding: 20px;
+  font-size: 45px;
+  font-weight: 600;
+  background-color: #00539c;
+  color: #fefefe;
+  border: 5px solid #00539c;
+  cursor: pointer;
+}
+
+#restartBtn:hover {
+  background-color: #216bac;
+  border: 5px solid #216bac;
+}
+
 @media (max-width: 480px) {
   h1 {
     font-size: 50px;
