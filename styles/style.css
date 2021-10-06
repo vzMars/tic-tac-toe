@@ -66,7 +66,8 @@ h2 {
   cursor: pointer;
 }
 
-.btns:hover {
+.btns:hover,
+.modal-btns:hover {
   background-color: #216bac;
   border: 5px solid #216bac;
 }
@@ -115,6 +116,10 @@ h2 {
 .modal-text {
   font-size: 20px;
   font-weight: 600;
+}
+
+#computerBtn {
+  margin-bottom: 20px;
 }
 
 @media (max-width: 480px) {

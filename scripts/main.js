@@ -1,12 +1,14 @@
-const Player = (name, mark) => {
+const Player = (name, mark, human) => {
   const setName = (newName) => (name = newName);
   const getName = () => name;
+  const setHuman = (status) => (human = status);
+  const getHuman = () => human;
   const getMark = () => mark;
-  return { getMark, getName, setName };
+  return { getMark, getName, setName, getHuman, setHuman };
 };
 
-const playerX = Player('Player X', 'X');
-const playerO = Player('Player O', 'O');
+const playerX = Player('Player X', 'X', true);
+const playerO = Player('Player O', 'O', true);
 
 const displayController = (() => {
   const squares = Array.from(document.querySelectorAll('.square'));
@@ -19,6 +21,8 @@ const displayController = (() => {
   const playerOName = document.querySelector('#playerOName');
   const renameBtnO = document.querySelector('#renameO');
   const startBtn = document.querySelector('#startBtn');
+  const playerBtn = document.querySelector('#playerBtn');
+  const computerBtn = document.querySelector('#computerBtn');
 
   document.getElementById('gameboard').addEventListener('click', (event) => {
     let index = squares.findIndex((square) => {
@@ -41,11 +45,13 @@ const displayController = (() => {
   });
 
   renameBtnX.addEventListener('click', () => {
+    console.log('clicked player x rename');
     playerX.setName(playerXName.value);
     init();
   });
 
   renameBtnO.addEventListener('click', () => {
+    console.log('clicked player o rename');
     playerO.setName(playerOName.value);
     init();
   });
@@ -53,6 +59,32 @@ const displayController = (() => {
   startBtn.addEventListener('click', () => {
     modal.style.display = 'none';
   });
+
+  playerBtn.addEventListener('click', () => {
+    playerO.setName('Player O');
+    playerOName.disabled = false;
+    buttonEnabled();
+  });
+
+  computerBtn.addEventListener('click', () => {
+    playerO.setName('Computer');
+    playerOName.disabled = true;
+    buttonDisabled();
+  });
+
+  const buttonDisabled = () => {
+    renameBtnO.disabled = true;
+    renameBtnO.style.border = '5px solid #bdc3c7';
+    renameBtnO.style.backgroundColor = '#bdc3c7';
+    renameBtnO.style.cursor = 'default';
+  };
+
+  const buttonEnabled = () => {
+    renameBtnO.disabled = true;
+    renameBtnO.style.border = '5px solid #00539c';
+    renameBtnO.style.backgroundColor = '#00539c';
+    renameBtnO.style.cursor = 'pointer';
+  };
 
   const changeGameInfo = (text) => {
     gameInfo.textContent = text;
