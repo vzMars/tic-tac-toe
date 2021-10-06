@@ -1,15 +1,24 @@
-const Player = (mark) => {
+const Player = (name, mark) => {
+  const setName = (newName) => (name = newName);
+  const getName = () => name;
   const getMark = () => mark;
-  return { getMark };
+  return { getMark, getName, setName };
 };
 
-const playerX = Player('X');
-const playerO = Player('O');
+const playerX = Player('Player X', 'X');
+const playerO = Player('Player O', 'O');
 
 const displayController = (() => {
   const squares = Array.from(document.querySelectorAll('.square'));
   const gameInfo = document.querySelector('.game-info');
   const restartBtn = document.querySelector('#restartBtn');
+  const newGameBtn = document.querySelector('#newGameBtn');
+  const modal = document.querySelector('.modal');
+  const playerXName = document.querySelector('#playerXName');
+  const renameBtnX = document.querySelector('#renameX');
+  const playerOName = document.querySelector('#playerOName');
+  const renameBtnO = document.querySelector('#renameO');
+  const startBtn = document.querySelector('#startBtn');
 
   document.getElementById('gameboard').addEventListener('click', (event) => {
     let index = squares.findIndex((square) => {
@@ -21,17 +30,41 @@ const displayController = (() => {
     }
   });
 
-  restartBtn.addEventListener('click', (event) => {
-    gameBoard.clearBoard();
-    gameLogic.setWinner(false);
-    gameLogic.setGameOver(false);
-    gameLogic.setCurrentTurn(playerX.getMark());
-    changeGameInfo(`Player ${gameLogic.getCurrentTurn()}'s turn!`);
-    render();
+  restartBtn.addEventListener('click', () => {
+    init();
+  });
+
+  newGameBtn.addEventListener('click', () => {
+    init();
+    console.log('hi');
+    modal.style.display = 'flex';
+  });
+
+  renameBtnX.addEventListener('click', () => {
+    playerX.setName(playerXName.value);
+    init();
+  });
+
+  renameBtnO.addEventListener('click', () => {
+    playerO.setName(playerOName.value);
+    init();
+  });
+
+  startBtn.addEventListener('click', () => {
+    modal.style.display = 'none';
   });
 
   const changeGameInfo = (text) => {
     gameInfo.textContent = text;
+    render();
+  };
+
+  const init = () => {
+    gameBoard.clearBoard();
+    gameLogic.setWinner(false);
+    gameLogic.setGameOver(false);
+    gameLogic.setCurrentTurn(playerX.getMark());
+    changeGameInfo(`${playerX.getName()}'s turn!`);
     render();
   };
 
@@ -60,19 +93,20 @@ const gameBoard = (() => {
   const addMark = (index) => {
     board[index] = gameLogic.getCurrentTurn();
     if (gameLogic.checkWinner(gameLogic.getCurrentTurn())) {
-      displayController.changeGameInfo(
-        `Player ${gameLogic.getCurrentTurn()} has won!`
-      );
+      if (gameLogic.getCurrentTurn() === playerX.getMark()) {
+        displayController.changeGameInfo(`${playerX.getName()} has won!`);
+      } else {
+        displayController.changeGameInfo(`${playerO.getName()} has won!`);
+      }
       gameLogic.setGameOver(true);
     } else {
       if (gameLogic.getCurrentTurn() === playerX.getMark()) {
         gameLogic.setCurrentTurn(playerO.getMark());
+        displayController.changeGameInfo(`${playerO.getName()}'s turn!`);
       } else {
         gameLogic.setCurrentTurn(playerX.getMark());
+        displayController.changeGameInfo(`${playerX.getName()}'s turn!`);
       }
-      displayController.changeGameInfo(
-        `Player ${gameLogic.getCurrentTurn()}'s turn!`
-      );
       gameLogic.checkDraw();
     }
   };
@@ -116,19 +150,19 @@ const gameLogic = (() => {
   const getWinner = () => winner;
 
   const setWinner = (status) => {
-    winner = false;
+    winner = status;
   };
 
   const checkWinner = (mark) => {
-    // console.log(`checking if player${mark} is the winner`);
+    console.log(`checking if player${mark} is the winner`);
     return (winner = winningCombos.some((combo) => {
-      //   console.log(`checking if ${combo} combo has ${mark} mark`);
+      console.log(`checking if ${combo} combo has ${mark} mark`);
       return combo.every((index) => {
-        // console.log(
-        //   `index: ${index}  hasMark: ${gameBoard
-        //     .getBoard()
-        //     [index].includes(mark)}`
-        // );
+        console.log(
+          `index: ${index}  hasMark: ${gameBoard
+            .getBoard()
+            [index].includes(mark)}`
+        );
         return gameBoard.getBoard()[index].includes(mark);
       });
     }));

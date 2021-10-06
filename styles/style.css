@@ -55,10 +55,10 @@ h2 {
   background-color: #216bac;
 }
 
-#restartBtn {
-  margin-top: 50px;
-  padding: 20px;
-  font-size: 45px;
+.btns,
+.modal-btns {
+  padding: 10px;
+  font-size: 35px;
   font-weight: 600;
   background-color: #00539c;
   color: #fefefe;
@@ -66,9 +66,55 @@ h2 {
   cursor: pointer;
 }
 
-#restartBtn:hover {
+.btns:hover {
   background-color: #216bac;
   border: 5px solid #216bac;
+}
+
+.btns {
+  margin-top: 50px;
+  padding: 20px;
+  font-size: 45px;
+}
+
+.modal {
+  display: flex;
+  position: fixed;
+  z-index: 1;
+  left: 0;
+  top: 0;
+  width: 100vw;
+  height: 100vh;
+  overflow: auto;
+  background-color: rgba(255, 214, 98, 0.5);
+}
+
+.modal-content {
+  position: relative;
+  margin: auto;
+}
+
+.player-flex {
+  display: flex;
+  gap: 20px;
+}
+
+.player-flex-items {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.modal-input {
+  padding: 10px;
+  margin-bottom: 5px;
+  border: 1px solid black;
+}
+
+.modal-text {
+  font-size: 20px;
+  font-weight: 600;
 }
 
 @media (max-width: 480px) {
@@ -100,5 +146,11 @@ h2 {
     height: 100px;
     width: 100px;
     font-size: 70px;
+  }
+
+  .btns,
+  .modal-btns {
+    padding: 10px;
+    font-size: 25px;
   }
 }

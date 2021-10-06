@@ -23,6 +23,34 @@
         <div class="square"></div>
       </div>
     </main>
-    <button id="restartBtn">Restart</button>
+    <button class="btns" id="restartBtn">Restart</button>
+    <button class="btns" id="newGameBtn">New Game</button>
+    <div class="modal">
+      <div class="modal-content">
+        <div class="player-flex">
+          <div class="player-flex-items">
+            <input
+              type="text"
+              class="modal-input"
+              id="playerXName"
+              value="Player X"
+            />
+            <button class="modal-btns" id="renameX">Rename</button>
+          </div>
+          <div class="player-flex-items">
+            <input
+              type="text"
+              class="modal-input"
+              id="playerOName"
+              value="Player O"
+            />
+            <button class="modal-btns" id="renameO">Rename</button>
+          </div>
+        </div>
+
+        <p class="modal-text">Ready?</p>
+        <button class="modal-btns" id="startBtn">Start</button>
+      </div>
+    </div>
   </body>
 </html>
