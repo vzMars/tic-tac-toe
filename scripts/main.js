@@ -29,8 +29,15 @@ const displayController = (() => {
       return square === event.target;
     });
     if (!gameLogic.getGameOver()) {
-      gameBoard.checkIndex(index);
-      render();
+      gameBoard.addPlayerMark(index);
+      if (!gameLogic.getCurrentHuman()) {
+        console.log(`computer's time to shine`);
+        document.addEventListener('click', freezeClick, true);
+        setTimeout(() => {
+          gameBoard.addComputerMark();
+          document.removeEventListener('click', freezeClick, true);
+        }, 2000);
+      }
     }
   });
 
@@ -40,18 +47,15 @@ const displayController = (() => {
 
   newGameBtn.addEventListener('click', () => {
     init();
-    console.log('hi');
     modal.style.display = 'flex';
   });
 
   renameBtnX.addEventListener('click', () => {
-    console.log('clicked player x rename');
     playerX.setName(playerXName.value);
     init();
   });
 
   renameBtnO.addEventListener('click', () => {
-    console.log('clicked player o rename');
     playerO.setName(playerOName.value);
     init();
   });
@@ -62,15 +66,22 @@ const displayController = (() => {
 
   playerBtn.addEventListener('click', () => {
     playerO.setName('Player O');
+    playerO.setHuman(true);
     playerOName.disabled = false;
     buttonEnabled();
   });
 
   computerBtn.addEventListener('click', () => {
     playerO.setName('Computer');
+    playerO.setHuman(false);
     playerOName.disabled = true;
     buttonDisabled();
   });
+
+  const freezeClick = (event) => {
+    event.stopPropagation();
+    event.preventDefault();
+  };
 
   const buttonDisabled = () => {
     renameBtnO.disabled = true;
@@ -80,10 +91,8 @@ const displayController = (() => {
   };
 
   const buttonEnabled = () => {
-    renameBtnO.disabled = true;
-    renameBtnO.style.border = '5px solid #00539c';
-    renameBtnO.style.backgroundColor = '#00539c';
-    renameBtnO.style.cursor = 'pointer';
+    renameBtnO.disabled = false;
+    renameBtnO.removeAttribute('style');
   };
 
   const changeGameInfo = (text) => {
@@ -95,7 +104,9 @@ const displayController = (() => {
     gameBoard.clearBoard();
     gameLogic.setWinner(false);
     gameLogic.setGameOver(false);
+    gameLogic.setCurrentHuman(playerX.getHuman());
     gameLogic.setCurrentTurn(playerX.getMark());
+    gameLogic.setCurrentPlayer(playerX.getName());
     changeGameInfo(`${playerX.getName()}'s turn!`);
     render();
   };
@@ -122,38 +133,53 @@ const gameBoard = (() => {
     }
   };
 
-  const addMark = (index) => {
+  const addPlayerMark = (index) => {
+    if (checkIndex(index) && gameLogic.getCurrentHuman()) {
+      addMarkToBoard(index);
+    }
+  };
+
+  const addComputerMark = () => {
+    console.log('inside the addComputerMark method');
+    let randomIndex = Math.floor(Math.random() * 8);
+    if (checkIndex(randomIndex)) {
+      console.log(randomIndex);
+      addMarkToBoard(randomIndex);
+    } else {
+      addComputerMark();
+    }
+    // let index = board.findIndex((item) => {
+    //   return item === '';
+    // });
+  };
+
+  const addMarkToBoard = (index) => {
     board[index] = gameLogic.getCurrentTurn();
     if (gameLogic.checkWinner(gameLogic.getCurrentTurn())) {
-      if (gameLogic.getCurrentTurn() === playerX.getMark()) {
-        displayController.changeGameInfo(`${playerX.getName()} has won!`);
-      } else {
-        displayController.changeGameInfo(`${playerO.getName()} has won!`);
-      }
+      displayController.changeGameInfo(
+        `${gameLogic.getCurrentPlayer()} has won!`
+      );
       gameLogic.setGameOver(true);
     } else {
-      if (gameLogic.getCurrentTurn() === playerX.getMark()) {
-        gameLogic.setCurrentTurn(playerO.getMark());
-        displayController.changeGameInfo(`${playerO.getName()}'s turn!`);
-      } else {
-        gameLogic.setCurrentTurn(playerX.getMark());
-        displayController.changeGameInfo(`${playerX.getName()}'s turn!`);
-      }
+      gameLogic.switchTurnPlayer();
+      displayController.changeGameInfo(
+        `${gameLogic.getCurrentPlayer()}'s turn!`
+      );
       gameLogic.checkDraw();
     }
   };
 
   const checkIndex = (index) => {
-    if (board[index] === '') {
-      addMark(index);
-    }
+    if (board[index] === '') return true;
   };
 
-  return { getBoard, clearBoard, checkIndex };
+  return { getBoard, clearBoard, addPlayerMark, addComputerMark };
 })();
 
 const gameLogic = (() => {
   let currentTurn = playerX.getMark();
+  let currentPlayer = playerX.getName();
+  let currentHuman = playerX.getHuman();
   let winner = false;
   let gameOver = false;
   const winningCombos = [
@@ -173,28 +199,43 @@ const gameLogic = (() => {
     currentTurn = mark;
   };
 
+  const getCurrentPlayer = () => currentPlayer;
+
+  const setCurrentPlayer = (player) => {
+    currentPlayer = player;
+  };
+
+  const getCurrentHuman = () => currentHuman;
+
+  const setCurrentHuman = (status) => {
+    currentHuman = status;
+  };
+
+  const switchTurnPlayer = () => {
+    if (getCurrentPlayer() === playerX.getName()) {
+      setCurrentPlayer(playerO.getName());
+      setCurrentTurn(playerO.getMark());
+      setCurrentHuman(playerO.getHuman());
+    } else {
+      setCurrentPlayer(playerX.getName());
+      setCurrentTurn(playerX.getMark());
+      setCurrentHuman(playerX.getHuman());
+    }
+  };
+
   const getGameOver = () => gameOver;
 
   const setGameOver = (status) => {
     gameOver = status;
   };
 
-  const getWinner = () => winner;
-
   const setWinner = (status) => {
     winner = status;
   };
 
   const checkWinner = (mark) => {
-    console.log(`checking if player${mark} is the winner`);
     return (winner = winningCombos.some((combo) => {
-      console.log(`checking if ${combo} combo has ${mark} mark`);
       return combo.every((index) => {
-        console.log(
-          `index: ${index}  hasMark: ${gameBoard
-            .getBoard()
-            [index].includes(mark)}`
-        );
         return gameBoard.getBoard()[index].includes(mark);
       });
     }));
@@ -210,11 +251,15 @@ const gameLogic = (() => {
 
   return {
     getCurrentTurn,
-    setCurrentTurn,
+    getCurrentPlayer,
     getGameOver,
+    getCurrentHuman,
+    setCurrentTurn,
+    setCurrentPlayer,
     setGameOver,
-    getWinner,
+    setCurrentHuman,
     setWinner,
+    switchTurnPlayer,
     checkWinner,
     checkDraw,
   };
