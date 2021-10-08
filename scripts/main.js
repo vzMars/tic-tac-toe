@@ -36,7 +36,8 @@ const displayController = (() => {
         setTimeout(() => {
           gameBoard.addComputerMark();
           document.removeEventListener('click', freezeClick, true);
-        }, 2000);
+          console.log('back here (set timeout)');
+        }, 1000);
       }
     }
   });
@@ -119,6 +120,7 @@ const displayController = (() => {
 
   return {
     changeGameInfo,
+    freezeClick,
   };
 })();
 
@@ -145,7 +147,7 @@ const gameBoard = (() => {
     if (checkIndex(randomIndex)) {
       console.log(randomIndex);
       addMarkToBoard(randomIndex);
-    } else {
+    } else if (!gameLogic.getGameOver()) {
       addComputerMark();
     }
     // let index = board.findIndex((item) => {
