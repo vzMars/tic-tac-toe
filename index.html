@@ -1,59 +1,37 @@
 <!DOCTYPE html>
-<html lang="en-US">
+<html lang="en">
   <head>
     <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Tic Tac Toe</title>
-    <link rel="stylesheet" href="styles/style.css" />
-    <script src="scripts/main.js" defer></script>
+    <link rel="stylesheet" href="css/normalize.css" />
+    <link rel="stylesheet" href="css/style.css" />
+    <script src="js/main.js" defer></script>
   </head>
   <body>
-    <h1>Tic Tac Toe</h1>
-    <h2 class="game-info">Player X's turn!</h2>
-    <main class="main">
-      <div class="grid" id="gameboard">
-        <div class="square"></div>
-        <div class="square"></div>
-        <div class="square"></div>
-        <div class="square"></div>
-        <div class="square"></div>
-        <div class="square"></div>
-        <div class="square"></div>
-        <div class="square"></div>
-        <div class="square"></div>
+    <section class="players">
+      <div class="player active">
+        One
+        <span class="x">X</span>
       </div>
-    </main>
-    <button class="btns" id="restartBtn">Restart</button>
-    <button class="btns" id="newGameBtn">New Game</button>
-    <div class="modal">
-      <div class="modal-content">
-        <button class="modal-btns" id="playerBtn">Player vs Player</button>
-        <p class="modal-text">Or</p>
-        <button class="modal-btns" id="computerBtn">Player vs Computer</button>
-        <div class="player-flex">
-          <div class="player-flex-items">
-            <input
-              type="text"
-              class="modal-input"
-              id="playerXName"
-              value="Player X"
-            />
-            <button class="modal-btns" id="renameX">Rename</button>
-          </div>
-          <div class="player-flex-items">
-            <input
-              type="text"
-              class="modal-input"
-              id="playerOName"
-              value="Player O"
-            />
-            <button class="modal-btns" id="renameO">Rename</button>
-          </div>
-        </div>
-
-        <p class="modal-text">Ready?</p>
-        <button class="modal-btns" id="startBtn">Start</button>
+      <div class="player">
+        Two
+        <span class="o">O</span>
       </div>
-    </div>
+    </section>
+    <h1></h1>
+    <section class="board">
+      <div class="square" id="0"></div>
+      <div class="square" id="1"></div>
+      <div class="square" id="2"></div>
+      <div class="square" id="3"></div>
+      <div class="square" id="4"></div>
+      <div class="square" id="5"></div>
+      <div class="square" id="6"></div>
+      <div class="square" id="7"></div>
+      <div class="square" id="8"></div>
+    </section>
+    <button>Restart</button>
   </body>
 </html>

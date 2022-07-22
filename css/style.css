@@ -1,0 +1,104 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@900&display=swap');
+
+html {
+  box-sizing: border-box;
+  font-size: 62.5%;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: inherit;
+}
+
+body {
+  background-color: #191c4f;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  font-family: 'Montserrat', sans-serif;
+}
+
+h1 {
+  margin: 0;
+  margin-top: 8rem;
+  color: #ffffff;
+  font-size: 5rem;
+}
+
+.players {
+  margin-top: 10rem;
+  display: flex;
+  justify-content: center;
+  gap: 8rem;
+  color: #ffffff;
+}
+
+.players .player {
+  font-size: 2.5rem;
+  gap: 1rem;
+}
+
+.players .x,
+.players .o {
+  font-size: 7rem;
+}
+
+.square {
+  cursor: pointer;
+}
+
+.square,
+.player {
+  background-color: #0f0f33;
+  width: 20rem;
+  height: 20rem;
+  border-radius: 3rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  user-select: none;
+}
+
+.player.active {
+  border: 5px solid #ffffff;
+}
+
+.x {
+  color: #e61755;
+}
+
+.o {
+  color: #fccf36;
+}
+
+.board {
+  margin-top: 4rem;
+  width: 68rem;
+  background-color: #6647c8;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 2rem;
+  padding: 2rem 1rem;
+  border-radius: 3rem;
+}
+
+.board .x,
+.board .o {
+  font-size: 13rem;
+}
+
+button {
+  background-color: #6647c8;
+  color: #0f0f33;
+  border: none;
+  font-family: inherit;
+  font-size: 5rem;
+  margin: 4rem 0 8rem 0;
+  padding: 4rem 6rem;
+  border-radius: 4rem;
+  cursor: pointer;
+}
