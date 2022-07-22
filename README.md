@@ -28,4 +28,4 @@ Take a look at these other projects that I have in my portfolio:
 
 **Calculator:** https://github.com/vzMars/calculator
 
-**Tic-Tac-Toe:** https://github.com/vzMars/etch-a-sketch
+**Etch A Sketch:** https://github.com/vzMars/etch-a-sketch
